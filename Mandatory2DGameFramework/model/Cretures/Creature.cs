@@ -18,6 +18,7 @@ namespace Mandatory2DGameFramework.model.Cretures
         // Todo consider how many attack / defence weapons are allowed
         public List<AttackItem?> Attack { get; set; }
         public List<DefenceItem?> Defence { get; set; }
+        bool isAlive = true;
 
         public Creature()
         {
@@ -26,17 +27,21 @@ namespace Mandatory2DGameFramework.model.Cretures
 
             Attack = null;
             Defence = null;
-
+            isAlive = true;
             Attack = new List<AttackItem?>(5);
             Defence = new List<DefenceItem?>(5);
 
         }
 
-        public int Hit(Creature target)
+        public int Hit()
         {
-            int damage = 5;
+            int damage = 0;
+            foreach (var item in Attack)
+                if (item != null)
+                {
+                    damage += item.Hit;
+                }
 
-            target.ReceiveHit(damage);
             return damage;
         }
 
@@ -56,6 +61,7 @@ namespace Mandatory2DGameFramework.model.Cretures
 
             if (HitPoint <= 0)
             {
+                isAlive = false;
                 Console.WriteLine("Creature is dead");
             }
         }
