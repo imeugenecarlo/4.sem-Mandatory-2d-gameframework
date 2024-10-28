@@ -15,12 +15,12 @@ namespace Mandatory2DGameFramework.model.Cretures
         public int HitPoint { get; set; }
         public int PositionX { get; set; }
         public int PositionY { get; set; }
-
+        public bool isAlive { get; set; } = true;
 
 
         // Todo consider how many attack / defence weapons are allowed
-        public List<AttackItem?> Attack { get; set; }
-        public List<DefenceItem?> Defence { get; set; }
+        public List<IAttackItem?> Attack { get; set; }
+        public List<IDefenceItem?> Defence { get; set; }
 
         public Creature(int x, int y)
         {
@@ -34,7 +34,7 @@ namespace Mandatory2DGameFramework.model.Cretures
 
         }
 
-        public int Hit()
+        public int Hit(Creature target)
         {
             int damage = 0;
             foreach (var item in Attack)
