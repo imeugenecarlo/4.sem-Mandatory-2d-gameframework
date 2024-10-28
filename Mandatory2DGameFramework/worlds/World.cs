@@ -28,7 +28,61 @@ namespace Mandatory2DGameFramework.worlds
 
         public override string ToString()
         {
-            return $"{{{nameof(MaxX)}={MaxX.ToString()}, {nameof(MaxY)}={MaxY.ToString()}}}";
+            var worldObjectsInfo = string.Join(", ", _worldObjects.Select(o => o.ToString()));
+            var creaturesInfo = string.Join(", ", _creatures.Select(c => c.ToString()));
+            return $"World: MaxX={MaxX}, MaxY={MaxY}\n" +
+                   $"Objects: [{worldObjectsInfo}]\n" +
+                   $"Creatures: [{creaturesInfo}]";
         }
+
+        private bool IsPositionOccupied(int x, int y)
+        {
+            return _worldObjects.Any(o => o.PositionX == x && o.PositionY == y) ||
+                   _creatures.Any(c => c.PositionX == x && c.PositionY == y);
+        }
+        //Create world object, checks if position is occupied
+        public void AddWorldObject(WorldObject obj)
+        {
+            if (obj != null && !IsPositionOccupied(obj.PositionX, obj.PositionY))
+            {
+                _worldObjects.Add(obj);
+            }
+            else
+            {
+                Console.WriteLine("Position is occupied or object is null.");
+            }
+        }
+        //Get world object Read Method
+        public WorldObject GetWorldObject(int x, int y)
+        {
+            return _worldObjects.FirstOrDefault(o => o.PositionX == x && o.PositionY == y);
+        }
+        //Remove world object method
+        public void RemoveWorldObject(WorldObject obj)
+        {
+            _worldObjects.Remove(obj);
+        }
+
+        //Add creature method
+        public void AddCreature(Creature creature)
+        {
+            if (creature != null && !IsPositionOccupied(creature.PositionX, creature.PositionY))
+            {
+                _creatures.Add(creature);
+            }
+            else
+            {
+                Console.WriteLine("Position is occupied or creature is null.");
+            }
+        }
+        //Remove Creature method
+        public void RemoveCreature(Creature creature)
+        {
+            _creatures.Remove(creature);
+        }
+
+
+
+
     }
 }

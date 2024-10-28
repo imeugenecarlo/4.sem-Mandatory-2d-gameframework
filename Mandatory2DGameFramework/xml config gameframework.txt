@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+    <AttackItems>
+        <AttackItem>
+            <Name>Sword</Name>
+            <Lootable>true</Lootable>
+            <Removeable>false</Removeable>
+            <Hit>10</Hit>
+            <Range>5</Range>
+            <PositionX>10</PositionX>
+            <PositionY>20</PositionY>
+        </AttackItem>
+        <AttackItem>
+            <Name>Axe</Name>
+            <Lootable>true</Lootable>
+            <Removeable>false</Removeable>
+            <Hit>15</Hit>
+            <Range>3</Range>
+            <PositionX>15</PositionX>
+            <PositionY>25</PositionY>
+        </AttackItem>
+    </AttackItems>
+    <DefenceItems>
+        <DefenceItem>
+            <Name>Shield</Name>
+            <Lootable>true</Lootable>
+            <Removeable>false</Removeable>
+            <ReduceHitPoint>5</ReduceHitPoint>
+            <PositionX>5</PositionX>
+            <PositionY>10</PositionY>
+        </DefenceItem>
+    </DefenceItems>
+</Configuration>

@@ -7,20 +7,22 @@ using System.Threading.Tasks;
 
 namespace Mandatory2DGameFramework.model.defence
 {
-    public class DefenceItem:WorldObject
+    public class DefenceItem : WorldObject
     {
-        public string Name { get; set; }
         public int ReduceHitPoint { get; set; }
 
-        public DefenceItem()
+        // Konstruktør
+        public DefenceItem(int x, int y, string name, bool lootable, bool removeable)
+            : base(x, y, name, lootable, removeable) // Kalder basiskonstruktøren
         {
-            Name = string.Empty;
-            ReduceHitPoint = 0;
+            ReduceHitPoint = 0; // Standardværdi for ReduceHitPoint
         }
 
         public override string ToString()
         {
-            return $"{{{nameof(Name)}={Name}, {nameof(ReduceHitPoint)}={ReduceHitPoint.ToString()}}}";
+            return $"{{{nameof(Name)}={Name}, {nameof(ReduceHitPoint)}={ReduceHitPoint}, " +
+                   $"{nameof(PositionX)}={PositionX}, {nameof(PositionY)}={PositionY}}}";
         }
     }
+
 }
