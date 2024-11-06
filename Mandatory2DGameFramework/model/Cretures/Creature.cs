@@ -22,16 +22,15 @@ namespace Mandatory2DGameFramework.model.Cretures
         public List<IAttackItem?> Attack { get; set; }
         public List<IDefenceItem?> Defence { get; set; }
 
-        public Creature(int x, int y)
+        public Creature(string name, int hitPoint, int x, int y)
         {
             PositionX = x;
             PositionY = y;
-            Name = string.Empty;
-            HitPoint = 100;
+            Name = name;
+            HitPoint = hitPoint;
 
-            Attack = new List<IAttackItem?>(5);
-            Defence = new List<IDefenceItem?>(5);
-
+            Attack = new List<IAttackItem?>(5);  
+            Defence = new List<IDefenceItem?>(5); 
         }
 
         public int Hit(Creature target)

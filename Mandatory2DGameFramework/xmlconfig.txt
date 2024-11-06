@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Configuration>
-    <AttackItems>
+    <World>
+        <MaxX>100</MaxX>
+        <MaxY>100</MaxY>
+    </World>
+    
+    <WorldObjects>
         <AttackItem>
             <Name>Sword</Name>
             <Lootable>true</Lootable>
@@ -10,17 +15,6 @@
             <PositionX>10</PositionX>
             <PositionY>20</PositionY>
         </AttackItem>
-        <AttackItem>
-            <Name>Axe</Name>
-            <Lootable>true</Lootable>
-            <Removeable>false</Removeable>
-            <Hit>15</Hit>
-            <Range>3</Range>
-            <PositionX>15</PositionX>
-            <PositionY>25</PositionY>
-        </AttackItem>
-    </AttackItems>
-    <DefenceItems>
         <DefenceItem>
             <Name>Shield</Name>
             <Lootable>true</Lootable>
@@ -29,5 +23,22 @@
             <PositionX>5</PositionX>
             <PositionY>10</PositionY>
         </DefenceItem>
-    </DefenceItems>
+        <Chest>
+            <Name>Golden Chest</Name>
+            <Lootable>true</Lootable>
+            <Removeable>true</Removeable>
+            <PositionX>50</PositionX>
+            <PositionY>50</PositionY>
+        </Chest>
+    </WorldObjects>
+
+    <Creatures>
+        <Creature>
+            <Name>Troll</Name>
+            <HitPoint>200</HitPoint>
+            <PositionX>80</PositionX>
+            <PositionY>90</PositionY>
+        </Creature>
+    </Creatures>
 </Configuration>
+
