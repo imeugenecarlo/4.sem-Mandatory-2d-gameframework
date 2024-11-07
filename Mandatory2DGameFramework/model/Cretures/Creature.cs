@@ -7,19 +7,55 @@ using System.Linq;
 
 namespace Mandatory2DGameFramework.model.Cretures
 {
+    /// <summary>
+    /// Represents a creature in the game.
+    /// </summary>
     public class Creature
     {
+        /// <summary>
+        /// Gets or sets the name of the creature.
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the hit points of the creature.
+        /// </summary>
         public int HitPoint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the X position of the creature.
+        /// </summary>
         public int PositionX { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Y position of the creature.
+        /// </summary>
         public int PositionY { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the creature is alive.
+        /// </summary>
         public bool isAlive { get; set; } = true;
 
         private ICreatureState _currentState;
 
+        /// <summary>
+        /// Gets or sets the list of attack items the creature has.
+        /// </summary>
         public List<IAttackItem?> Attack { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of defense items the creature has.
+        /// </summary>
         public List<IDefenceItem?> Defence { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Creature"/> class.
+        /// </summary>
+        /// <param name="name">The name of the creature.</param>
+        /// <param name="hitPoint">The hit points of the creature.</param>
+        /// <param name="x">The X position of the creature.</param>
+        /// <param name="y">The Y position of the creature.</param>
         public Creature(string name, int hitPoint, int x, int y)
         {
             PositionX = x;
@@ -33,32 +69,57 @@ namespace Mandatory2DGameFramework.model.Cretures
             _currentState = new AliveState();
         }
 
+        /// <summary>
+        /// Sets the state of the creature.
+        /// </summary>
+        /// <param name="newState">The new state of the creature.</param>
         public void SetState(ICreatureState newState)
         {
             _currentState = newState;
         }
 
+        /// <summary>
+        /// Hits the specified target creature.
+        /// </summary>
+        /// <param name="target">The target creature.</param>
         public void Hit(Creature target)
         {
             _currentState.Hit(this, target);
         }
 
+        /// <summary>
+        /// Receives a hit with the specified damage.
+        /// </summary>
+        /// <param name="hit">The damage to be received.</param>
         public void ReceiveHit(int hit)
         {
             _currentState.ReceiveHit(this, hit);
         }
 
+        /// <summary>
+        /// Moves the creature by the specified delta values.
+        /// </summary>
+        /// <param name="dx">The delta X value.</param>
+        /// <param name="dy">The delta Y value.</param>
+        /// <param name="world">The world in which the creature moves.</param>
         public void Move(int dx, int dy, World world)
         {
             _currentState.Move(this, dx, dy, world);
         }
 
+        /// <summary>
+        /// Loots the specified world object.
+        /// </summary>
+        /// <param name="obj">The world object to be looted.</param>
         public void Loot(WorldObject obj)
         {
             _currentState.Loot(this, obj);
         }
 
-        // Default actions used by the states
+        /// <summary>
+        /// Default action for hitting a target creature.
+        /// </summary>
+        /// <param name="target">The target creature.</param>
         public void DefaultHit(Creature target)
         {
             int damage = 0;
@@ -75,6 +136,10 @@ namespace Mandatory2DGameFramework.model.Cretures
             }
         }
 
+        /// <summary>
+        /// Default action for receiving a hit.
+        /// </summary>
+        /// <param name="hit">The damage to be received.</param>
         public void DefaultReceiveHit(int hit)
         {
             int totalDamageReduction = Defence.Where(item => item != null).Sum(item => item.ReduceHitPoint);
@@ -89,6 +154,12 @@ namespace Mandatory2DGameFramework.model.Cretures
             }
         }
 
+        /// <summary>
+        /// Default action for moving the creature.
+        /// </summary>
+        /// <param name="dx">The delta X value.</param>
+        /// <param name="dy">The delta Y value.</param>
+        /// <param name="world">The world in which the creature moves.</param>
         public void DefaultMove(int dx, int dy, World world)
         {
             int newX = PositionX + dx;
@@ -112,8 +183,10 @@ namespace Mandatory2DGameFramework.model.Cretures
             }
         }
 
-
-
+        /// <summary>
+        /// Default action for looting a world object.
+        /// </summary>
+        /// <param name="obj">The world object to be looted.</param>
         public void DefaultLoot(WorldObject obj)
         {
             if (obj is IAttackItem attackItem)
@@ -156,6 +229,12 @@ namespace Mandatory2DGameFramework.model.Cretures
             }
         }
 
+        /// <summary>
+        /// Replaces an item in the specified list with a new item.
+        /// </summary>
+        /// <typeparam name="T">The type of the items in the list.</typeparam>
+        /// <param name="itemList">The list of items.</param>
+        /// <param name="newItem">The new item to replace with.</param>
         private void ReplaceItem<T>(List<T?> itemList, T newItem) where T : class
         {
             Console.WriteLine("Choose an item to replace:");
@@ -175,6 +254,10 @@ namespace Mandatory2DGameFramework.model.Cretures
             }
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
             string attackItems = string.Join(", ", Attack.Where(item => item != null).Select(item => item?.Name));
@@ -185,4 +268,5 @@ namespace Mandatory2DGameFramework.model.Cretures
         }
     }
 }
+
 

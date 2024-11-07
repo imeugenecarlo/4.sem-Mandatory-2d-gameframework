@@ -10,15 +10,27 @@ using Mandatory2DGameFramework.model.Cretures;
 using Mandatory2DGameFramework.model.defence;
 using Mandatory2DGameFramework.worlds;
 
+/// <summary>
+/// Class responsible for loading configuration data from XML files.
+/// </summary>
 public class ConfigLoader : IConfigLoader
 {
     private readonly IMyLogger _logger;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ConfigLoader"/> class.
+    /// </summary>
+    /// <param name="logger">The logger instance to use for logging.</param>
     public ConfigLoader(IMyLogger logger)
     {
         _logger = logger;
     }
 
+    /// <summary>
+    /// Loads attack items from the specified XML file.
+    /// </summary>
+    /// <param name="filePath">The path to the XML file.</param>
+    /// <returns>A list of loaded attack items.</returns>
     public List<AttackItem> LoadAttackItems(string filePath)
     {
         var attackItems = new List<AttackItem>();
@@ -50,6 +62,11 @@ public class ConfigLoader : IConfigLoader
         }
     }
 
+    /// <summary>
+    /// Loads defense items from the specified XML file.
+    /// </summary>
+    /// <param name="filePath">The path to the XML file.</param>
+    /// <returns>A list of loaded defense items.</returns>
     public List<DefenceItem> LoadDefenceItems(string filePath)
     {
         var defenceItems = new List<DefenceItem>();
@@ -80,6 +97,11 @@ public class ConfigLoader : IConfigLoader
         }
     }
 
+    /// <summary>
+    /// Loads creatures from the specified XML file.
+    /// </summary>
+    /// <param name="filePath">The path to the XML file.</param>
+    /// <returns>A list of loaded creatures.</returns>
     public List<Creature> LoadCreatures(string filePath)
     {
         var creatures = new List<Creature>();
@@ -108,6 +130,11 @@ public class ConfigLoader : IConfigLoader
         return creatures;
     }
 
+    /// <summary>
+    /// Loads the world from the specified XML file.
+    /// </summary>
+    /// <param name="filePath">The path to the XML file.</param>
+    /// <returns>The loaded world.</returns>
     public World LoadWorld(string filePath)
     {
         try
@@ -136,6 +163,11 @@ public class ConfigLoader : IConfigLoader
         }
     }
 
+    /// <summary>
+    /// Loads world objects from the specified XML file.
+    /// </summary>
+    /// <param name="filePath">The path to the XML file.</param>
+    /// <returns>A list of loaded world objects.</returns>
     public List<WorldObject> LoadWorldObjects(string filePath)
     {
         var worldObjects = new List<WorldObject>();
