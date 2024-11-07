@@ -1,58 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mandatory2DGameFramework.logging
 {
-    using System;
-    using System.Diagnostics;
-
     public class MyLogger : IMyLogger
     {
-        private static readonly Lazy<MyLogger> instance = new Lazy<MyLogger>(() => new MyLogger());
+        private static MyLogger? _instance;
+        private readonly TraceSource _traceSource;
 
         private MyLogger()
         {
+            _traceSource = new TraceSource("MyLogger");
         }
 
-        public static MyLogger Instance => instance.Value;
+        public static MyLogger Instance => _instance ??= new MyLogger();
 
         public void RegisterListener(TraceListener listener)
         {
-            if (listener != null && !Trace.Listeners.Contains(listener))
-            {
-                Trace.Listeners.Add(listener);
-            }
+            _traceSource.Listeners.Add(listener);
         }
 
         public void UnregisterListener(TraceListener listener)
         {
-            if (listener != null && Trace.Listeners.Contains(listener))
-            {
-                Trace.Listeners.Remove(listener);
-            }
+            _traceSource.Listeners.Remove(listener);
         }
 
         public void LogInfo(string message)
         {
-            Trace.WriteLine($"INFO: {message}");
-            Trace.Flush();
-        }
-
-        public void LogWarning(string message)
-        {
-            Trace.WriteLine($"WARNING: {message}");
-            Trace.Flush();
+            _traceSource.TraceEvent(TraceEventType.Information, 0, message);
+            Console.WriteLine($"INFO: {message}");
         }
 
         public void LogError(string message)
         {
-            Trace.WriteLine($"ERROR: {message}");
-            Trace.Flush();
+            _traceSource.TraceEvent(TraceEventType.Error, 0, message);
+            Console.WriteLine($"ERROR: {message}");
+        }
+
+        public void LogWarning(string message)
+        {
+            _traceSource.TraceEvent(TraceEventType.Warning, 0, message);
+            Console.WriteLine($"WARNING: {message}");
+        }
+
+        public void LogDebug(string message)
+        {
+            _traceSource.TraceEvent(TraceEventType.Verbose, 0, message);
+            Console.WriteLine($"DEBUG: {message}");
         }
     }
-
 }
+
+

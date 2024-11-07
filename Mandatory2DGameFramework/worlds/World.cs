@@ -35,7 +35,7 @@ namespace Mandatory2DGameFramework.worlds
                    $"Creatures: [{creaturesInfo}]";
         }
 
-        private bool IsPositionOccupied(int x, int y)
+        public bool IsPositionOccupied(int x, int y)
         {
             return _worldObjects.Any(o => o.PositionX == x && o.PositionY == y) ||
                    _creatures.Any(c => c.PositionX == x && c.PositionY == y);
@@ -53,10 +53,11 @@ namespace Mandatory2DGameFramework.worlds
             }
         }
         //Get world object Read Method
-        public WorldObject GetWorldObject(int x, int y)
+        public IEnumerable<WorldObject> GetWorldObjects(int x, int y)
         {
-            return _worldObjects.FirstOrDefault(o => o.PositionX == x && o.PositionY == y);
+            return _worldObjects.Where(o => o.PositionX == x && o.PositionY == y);
         }
+
         //Remove world object method
         public void RemoveWorldObject(WorldObject obj)
         {

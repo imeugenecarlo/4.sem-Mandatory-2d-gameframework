@@ -4,8 +4,6 @@ using Mandatory2DGameFramework.worlds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mandatory2DGameFramework.model.Cretures
 {
@@ -17,8 +15,8 @@ namespace Mandatory2DGameFramework.model.Cretures
         public int PositionY { get; set; }
         public bool isAlive { get; set; } = true;
 
+        private ICreatureState _currentState;
 
-        // Todo consider how many attack / defence weapons are allowed
         public List<IAttackItem?> Attack { get; set; }
         public List<IDefenceItem?> Defence { get; set; }
 
@@ -29,11 +27,39 @@ namespace Mandatory2DGameFramework.model.Cretures
             Name = name;
             HitPoint = hitPoint;
 
-            Attack = new List<IAttackItem?>(5);  
-            Defence = new List<IDefenceItem?>(5); 
+            Attack = new List<IAttackItem?>();
+            Defence = new List<IDefenceItem?>();
+
+            _currentState = new AliveState();
         }
 
-        public int Hit(Creature target)
+        public void SetState(ICreatureState newState)
+        {
+            _currentState = newState;
+        }
+
+        public void Hit(Creature target)
+        {
+            _currentState.Hit(this, target);
+        }
+
+        public void ReceiveHit(int hit)
+        {
+            _currentState.ReceiveHit(this, hit);
+        }
+
+        public void Move(int dx, int dy, World world)
+        {
+            _currentState.Move(this, dx, dy, world);
+        }
+
+        public void Loot(WorldObject obj)
+        {
+            _currentState.Loot(this, obj);
+        }
+
+        // Default actions used by the states
+        public void DefaultHit(Creature target)
         {
             int damage = 0;
             foreach (var item in Attack)
@@ -43,43 +69,59 @@ namespace Mandatory2DGameFramework.model.Cretures
                 }
 
             target.ReceiveHit(damage);
-            if(target.HitPoint<=0)
+            if (target.HitPoint <= 0)
             {
                 Console.WriteLine($"{target.Name} has been defeated by {Name}");
             }
-            return damage;
         }
 
-        public void ReceiveHit(int hit)
+        public void DefaultReceiveHit(int hit)
         {
             int totalDamageReduction = Defence.Where(item => item != null).Sum(item => item.ReduceHitPoint);
 
-
-            foreach (var item in Defence)
-            {
-                if (item != null)
-                {
-                    totalDamageReduction += item.ReduceHitPoint;
-                }
-            }
             hit = Math.Max(0, hit - totalDamageReduction);
             HitPoint -= hit;
 
             if (HitPoint <= 0)
             {
                 isAlive = false;
-                Console.WriteLine("Creature is dead");
+                Console.WriteLine($"{Name} is dead.");
             }
         }
-        //function to loot an item, if the creature has less than 5 items,
-        //it will add the item to the list, otherwise it will ask the user if they want to replace an existing item
-        public void Loot(WorldObject obj)
+
+        public void DefaultMove(int dx, int dy, World world)
+        {
+            int newX = PositionX + dx;
+            int newY = PositionY + dy;
+
+            if (world.IsPositionOccupied(newX, newY))
+            {
+                Console.WriteLine("Position is occupied or object is null.");
+                return;
+            }
+
+            PositionX = newX;
+            PositionY = newY;
+            Console.WriteLine($"{Name} moved to ({newX}, {newY})");
+
+            // Check for lootable items at the new position
+            var lootableItems = world.GetWorldObjects(newX, newY);
+            foreach (var item in lootableItems)
+            {
+                Loot(item);
+            }
+        }
+
+
+
+        public void DefaultLoot(WorldObject obj)
         {
             if (obj is IAttackItem attackItem)
             {
                 if (Attack.Count < 5)
                 {
                     Attack.Add(attackItem);
+                    Console.WriteLine($"{Name} looted {attackItem.Name}");
                 }
                 else
                 {
@@ -98,6 +140,7 @@ namespace Mandatory2DGameFramework.model.Cretures
                 if (Defence.Count < 5)
                 {
                     Defence.Add(defenceItem);
+                    Console.WriteLine($"{Name} looted {defenceItem.Name}");
                 }
                 else
                 {
@@ -112,7 +155,7 @@ namespace Mandatory2DGameFramework.model.Cretures
                 }
             }
         }
-        //function to replace an item
+
         private void ReplaceItem<T>(List<T?> itemList, T newItem) where T : class
         {
             Console.WriteLine("Choose an item to replace:");
@@ -132,25 +175,14 @@ namespace Mandatory2DGameFramework.model.Cretures
             }
         }
 
-        public void Move(int dx, int dy, World world)
-        {
-            int newX = PositionX + dx;
-            int newY = PositionY + dy;
-
-            if(newX >= 0 && newX< world.MaxX && newY >= 0 && newY>world.MaxY )
-            {        
-                PositionX = newX;
-                PositionY = newY;
-            }
-            {
-                Console.WriteLine("Invalid move, movement is out of bounds");
-            }
-        }
-
-
         public override string ToString()
         {
-            return $"{{{nameof(Name)}={Name}, {nameof(HitPoint)}={HitPoint.ToString()}, {nameof(Attack)}={Attack}, {nameof(Defence)}={Defence}}}";
+            string attackItems = string.Join(", ", Attack.Where(item => item != null).Select(item => item?.Name));
+            string defenceItems = string.Join(", ", Defence.Where(item => item != null).Select(item => item?.Name));
+
+            return $"Name: {Name}, HitPoint: {HitPoint}, Position: ({PositionX}, {PositionY}), " +
+                   $"Attack Items: [{attackItems}], Defence Items: [{defenceItems}]";
         }
     }
 }
+

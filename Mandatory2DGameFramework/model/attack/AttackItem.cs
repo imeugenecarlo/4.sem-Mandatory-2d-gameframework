@@ -1,25 +1,19 @@
 ﻿using Mandatory2DGameFramework.worlds;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Mandatory2DGameFramework.model.attack
 {
-    public class AttackItem : WorldObject
+    public class AttackItem : WorldObject, IAttackItem
     {
         public int Hit { get; set; }
         public int Range { get; set; }
 
-        // Konstruktør
-        public AttackItem(int x, int y, string name, bool lootable, bool removeable)
-            : base(x, y, name, lootable, removeable) // Kalder basiskonstruktøren
+        public AttackItem(int x, int y, string name, bool lootable, bool removeable, int hit, int range)
+            : base(x, y, name, lootable, removeable)
         {
-            Hit = 0; // Standardværdi for Hit
-            Range = 0; // Standardværdi for Range
+            Hit = hit;
+            Range = range;
         }
-
         public override string ToString()
         {
             return $"{{{nameof(Name)}={Name}, {nameof(Hit)}={Hit}, {nameof(Range)}={Range}, " +
@@ -27,3 +21,4 @@ namespace Mandatory2DGameFramework.model.attack
         }
     }
 }
+

@@ -19,26 +19,18 @@
             <Name>Shield</Name>
             <Lootable>true</Lootable>
             <Removeable>false</Removeable>
-            <ReduceHitPoint>5</ReduceHitPoint>
+            <ReduceHitPoint>10</ReduceHitPoint>
             <PositionX>5</PositionX>
             <PositionY>10</PositionY>
         </DefenceItem>
-        <Chest>
-            <Name>Golden Chest</Name>
-            <Lootable>true</Lootable>
-            <Removeable>true</Removeable>
-            <PositionX>50</PositionX>
-            <PositionY>50</PositionY>
-        </Chest>
     </WorldObjects>
 
     <Creatures>
         <Creature>
             <Name>Troll</Name>
             <HitPoint>200</HitPoint>
-            <PositionX>80</PositionX>
-            <PositionY>90</PositionY>
+            <PositionX>20</PositionX>
+            <PositionY>20</PositionY>
         </Creature>
     </Creatures>
 </Configuration>
-
