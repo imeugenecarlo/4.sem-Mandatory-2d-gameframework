@@ -11,16 +11,11 @@ class Program
 {
     static void Main()
     {
-        // Initialize world
-        World world = new World(100, 100);
-        // Initialize logger
-        IMyLogger logger = MyLogger.Instance;
-
-        // Initialize config loader with logger
-        IConfigLoader configLoader = new ConfigLoader(logger);
-
-        // Initialize game framework with config loader and logger
-        GameFramework gameFramework = new GameFramework(configLoader, logger);
+        // Use the singleton instance of MyLogger
+        MyLogger logger = MyLogger.Instance;
+        var world = new World(100, 100);
+        var configLoader = new ConfigLoader(logger);
+        var gameFramework = new GameFramework(configLoader, logger);
 
         // Load configuration from XML file
         string filePath = "xmlconfig.txt";
@@ -80,8 +75,8 @@ class Program
 
         // Add additional properties
         Creature humanKnight = new Creature("human knight", 25, 0, 0);
-        AttackItem excelsior = new AttackItem(10, 10, "Excelsior", true, true,10,5);
-        DefenceItem excelShield = new DefenceItem(10, 10, "ExcelShield", true, true,7);
+        AttackItem excelsior = new AttackItem(10, 10, "Excelsior", true, true, 10, 5);
+        DefenceItem excelShield = new DefenceItem(10, 10, "ExcelShield", true, true, 7);
 
         Console.WriteLine(humanKnight);
         world.AddCreature(humanKnight);
@@ -92,10 +87,41 @@ class Program
         Console.WriteLine(world);
 
         Console.WriteLine();
-        humanKnight.Move(10, 10, world); 
-        humanKnight.Loot(excelsior);    
-        humanKnight.Loot(excelShield);   
+        humanKnight.Move(10, 10, world);
+        humanKnight.Loot(excelsior);
+        humanKnight.Loot(excelShield);
         Console.WriteLine(humanKnight);
-        Console.ReadLine();
+        Console.WriteLine();
+        Console.WriteLine();
+
+        // Find the troll in the list of creatures
+        Creature? troll = creatures.FirstOrDefault(c => c.Name.ToLower() == "troll");
+        if (troll != null)
+        {
+            // Move the human knight to the troll's position
+            humanKnight.Move(troll.PositionX - humanKnight.PositionX, troll.PositionY - humanKnight.PositionY, world);
+
+            // Human knight hits the troll once
+            humanKnight.Hit(troll);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"{humanKnight.Name} hits {troll.Name}. {troll.Name} HP: {troll.HitPoint}");
+            Console.ResetColor();
+
+            // Troll hits the human knight once
+            if (troll.isAlive)
+            {
+                troll.Hit(humanKnight);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"{troll.Name} hits {humanKnight.Name}. {humanKnight.Name} HP: {humanKnight.HitPoint}");
+                Console.ResetColor();
+            }
+        }
+        else
+        {
+            Console.WriteLine("Troll not found in the loaded creatures.");
+        }
+
+        Console.WriteLine();
+        Console.WriteLine(world);
     }
 }
